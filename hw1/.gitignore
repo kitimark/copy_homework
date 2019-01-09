@@ -1,4 +1,7 @@
 /bin/
 
+# visual studio code
+/.vscode/
+
 # intelliJ IDE
 /.idea/
