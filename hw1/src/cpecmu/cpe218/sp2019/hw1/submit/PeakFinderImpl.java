@@ -14,7 +14,18 @@ public class PeakFinderImpl implements PeakFinder {
 
     @Override
     public int peakPosition(int[] a) {
-        // TODO Your code here
+        int pos = a.length/2;
+        int head = 0;
+        int tail = a.length-1;
+        return k(a, pos, head, tail);
+    }
+
+    public int k(int[] x, int pos, int head, int tail)
+    {
+        if(tail == head) return pos;
+        else if(x[pos] >= x[pos-1] && x[pos] >= x[pos+1]) return pos;
+        else if(x[pos-1] >= x[pos+1]) return k(x, ((pos-1-head)/2)+head, head, pos-1);
+        else if(x[pos-1] <= x[pos+1]) return k(x, ((tail-pos+1)/2)+pos, pos+1, tail);
         return -1;
     }
 
