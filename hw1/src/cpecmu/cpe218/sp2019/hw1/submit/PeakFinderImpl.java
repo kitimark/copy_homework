@@ -17,15 +17,15 @@ public class PeakFinderImpl implements PeakFinder {
         int pos = a.length/2;
         int head = 0;
         int tail = a.length-1;
-        return k(a, pos, head, tail);
+        return peakPosition(a, pos, head, tail);
     }
 
-    public int k(int[] x, int pos, int head, int tail)
+    public int peakPosition(int[] a, int pos, int head, int tail)
     {
         if(tail == head) return pos;
-        else if(x[pos] >= x[pos-1] && x[pos] >= x[pos+1]) return pos;
-        else if(x[pos-1] >= x[pos+1]) return k(x, ((pos-1-head)/2)+head, head, pos-1);
-        else if(x[pos-1] <= x[pos+1]) return k(x, ((tail-pos+1)/2)+pos, pos+1, tail);
+        else if(a[pos] >= a[pos-1] && a[pos] >= a[pos+1]) return pos;
+        else if(a[pos-1] >= a[pos+1]) return peakPosition(a, ((pos-1-head)/2)+head, head, pos-1);
+        else if(a[pos-1] <= a[pos+1]) return peakPosition(a, ((tail-pos+1)/2)+pos, pos+1, tail);
         return -1;
     }
 
