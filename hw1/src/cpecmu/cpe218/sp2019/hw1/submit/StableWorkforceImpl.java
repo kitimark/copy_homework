@@ -5,11 +5,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import cpecmu.cpe218.sp2019.hw1.StableWorkforce;
 import cpecmu.cpe218.sp2019.hw1.WorkforcePreferences;
@@ -22,8 +25,41 @@ public class StableWorkforceImpl implements StableWorkforce {
 
     @Override
     public <C, W> Map<C, Set<W>> stableMatching(WorkforcePreferences<C, W> wp) {
-        // TODO You code here
-        return new HashMap<>();
+        Map<C, SortedMap<Integer, W>> m = new HashMap<>();
+
+        // Initialize Company in m
+        for(C company : wp.companies()){     
+            m.put(company, new TreeMap<Integer, W>());
+        }
+
+        for(W worker : wp.workers()){
+            for(int i = 0; i < wp.companies().size(); i++){
+
+                C company = wp.workerPref(worker, i);
+                
+                // add worker in company
+                m.get(company).put(wp.companyRank(company, worker), worker);
+                
+                // if company has workers too much
+                if(wp.capacity(company) < m.get(company).size()){
+                    //low priority worker is fired
+                    worker = m.get(company).get(m.get(company).lastKey());
+                    m.get(company).remove(m.get(company).lastKey());
+                    
+                    i = wp.workerRank(worker, company);
+                    // that worker will find other company
+                    continue;
+                }
+                // Otherwise (no one is fired)
+                break;
+            }
+        }
+
+        Map<C, Set<W>> map = new HashMap<>();
+        for(C company : wp.companies()){
+            map.put(company, new HashSet<W>((m.get(company).values())));
+        }
+        return map;
     }
 
     public static void main(String[] args) {
